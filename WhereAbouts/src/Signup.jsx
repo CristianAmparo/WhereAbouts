@@ -29,9 +29,12 @@ function Signup() {
 
     if (!fname || !lname || department === "Select Department" || !username || !password || !repeatPassword) {
       setError("Please fill in all fields.");
+    } else if (password != repeatPassword) {
+      setError("Password not match!")
+
     } else {
       setError("");
-      axios.post('localhost/api/user/save')
+      navigate('/Login')
       console.log(formData)
 
       // Perform your form submission logic here
@@ -45,6 +48,9 @@ function Signup() {
   const emptyField = (fieldName) => {
     return !formData[fieldName] || (fieldName === "department" && formData[fieldName] === "Select Department");
   };
+
+
+
 
   return (
     <>

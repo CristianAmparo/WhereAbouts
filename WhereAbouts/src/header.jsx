@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Header = () => {
     return (
         <>
@@ -10,10 +12,12 @@ const Header = () => {
                         <h2>Profile</h2>
                     </button>
                    
-                    <button className="flex flex-col items-center font-bold"> 
-                        <img className="w-8" src="public/images/logout.png"/>
-                        <h2>Logout</h2>
-                    </button>
+                     <Link to={'/Login'} >
+                        <button className="flex flex-col items-center font-bold"> 
+                            <img className="w-8" src="public/images/logout.png"/>
+                            <h2>Logout</h2>
+                        </button>
+                    </Link>
                 </div>
 
             </header>
