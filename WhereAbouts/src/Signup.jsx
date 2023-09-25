@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {Link ,useNavigate } from "react-router-dom";
-import axios from "axios"
+
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -23,26 +23,51 @@ function Signup() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { fname, lname, department, username, password, repeatPassword } = formData;
+ const handleSubmit = (e) => {
+  e.preventDefault();
+  const { fname, lname, department, username, password, repeatPassword } = formData;
 
-    if (!fname || !lname || department === "Select Department" || !username || !password || !repeatPassword) {
-      setError("Please fill in all fields.");
-    } else if (password != repeatPassword) {
-      setError("Password not match!")
+  if (!fname || !lname || department === "Select Department" || !username || !password || !repeatPassword) {
+    setError("Please fill in all fields.");
+  } else if (password !== repeatPassword) {
+    setError("Passwords do not match!");
+  } else {
+    setError(""); // Clear any previous errors
 
-    } else {
-      setError("");
-      navigate('/Login')
-      console.log(formData)
+    // Collect the form data
+    const dataToSend = {
+      fname,
+      lname,
+      department,
+      username,
+      password,
+    };
 
-      // Perform your form submission logic here
-      // If successful, redirect to the login page
-     //navigate("/Login");
-
-    }
-  };
+    // Send the data to the PHP script
+    fetch("http://localhost/WhereAbouts/api/signup.php", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend), // Convert the data to JSON
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.error) {
+          setError(response.error);
+        } else if (response.result) {
+          // Registration was successful, redirect to the login page
+          navigate("/Login");
+        }
+      })
+      .catch((err) => {
+        setError("An error occurred. Please try again later.");
+        console.log(err);
+      });
+  }
+};
+  
 
   // Determine whether a field is empty
   const emptyField = (fieldName) => {

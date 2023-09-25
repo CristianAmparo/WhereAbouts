@@ -1,14 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+
 const Login = () => {
-    
   const [formData, setFormData] = useState({
     username: "",
-    password: "",
-  
+    password: ""
   });
 
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,39 +22,48 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const {  username, password,} = formData;
+    const { username, password } = formData;
 
-    if ( !username || !password) {
-      setError("Please put your Username and Password.");
-    } else { 
-        
-      setError("");
-      var url = "http://localhost/WhereAbouts/api/login.php"
-      var headers = {
-        "accept" : "application/json",
-        "content-type": "application/json"
+    if (!username || !password) {
+      setError("Please enter both username and password.");
+    } else {
+      setLoading(true); // Show loading indicator while making the API request
+
+      const url = "http://localhost/WhereAbouts/api/login.php";
+      const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
       };
-      var Data = {
+      const data = {
         username: username,
-        password: password
+        password: password,
       };
+
       fetch(url, {
         method: "POST",
         headers: headers,
-        body: JSON.stringify(Data)
-      }).then((response) => response.json())
-      .then((response) =>{
-        setMsg(response[0].result);
-      }).catch((err) => {
-        setError(err);
-        console.log(err);
+        body: JSON.stringify(data),
       })
-      console.log(formData)
-
-      // Perform your form submission logic here
-      // If successful, redirect to the login page
-     //navigate("/Login");
-
+        .then((response) => response.json())
+        .then((response) => {
+          setLoading(false); // Hide loading indicator
+          if (response[0].result === "Login Successfully") {
+            setSuccess("Login successful.");
+         
+            setError(""); // Clear any previous errors
+            
+            navigate("/Content"); // Redirect to the content page on success
+          } else {
+            setError("Invalid username or password.");
+            setSuccess("");
+          }
+        })
+        .catch((err) => {
+          setLoading(false); // Hide loading indicator
+          setError("An error occurred. Please try again later.");
+          setSuccess("");
+          console.log(err);
+        });
     }
   };
 
@@ -90,7 +100,9 @@ const Login = () => {
                     onChange={handleChange}
                     className={emptyField("password") ? "red-border" : ""}
                     />
-                {error && <div className="text-red-500  text-sm text-center">{error}</div>}
+                {error && <div className="text-red-500 -mb-3 mt-3 text-sm text-center">{error}</div>}
+                {success && <div className="text-green-500 -mb-3 mt-3  text-sm text-center">{success}</div>}
+
                 <button type="submit" className='p-2  w-full mt-5 bg-[#577F98] text-white'>Login</button>
                 <h2 className='w-full text-center'>Don't have an account <span className='text-blue-500'><Link to="/Signup">Signup</Link> </span></h2>
             </div>
@@ -99,6 +111,8 @@ const Login = () => {
     </div>
         </>
     )
-}
 
+
+
+};
 export default Login;
