@@ -4,6 +4,7 @@ import {Link ,useNavigate } from "react-router-dom";
 
 function Signup() {
   const [formData, setFormData] = useState({
+    image: "",
     fname: "",
     lname: "",
     department: "Select Department",
@@ -17,6 +18,7 @@ function Signup() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
     setFormData({
       ...formData,
       [name]: value,
@@ -25,9 +27,9 @@ function Signup() {
 
  const handleSubmit = (e) => {
   e.preventDefault();
-  const { fname, lname, department, username, password, repeatPassword } = formData;
+  const {  fname, lname, department, username, password, repeatPassword, image } = formData;
 
-  if (!fname || !lname || department === "Select Department" || !username || !password || !repeatPassword) {
+  if ( !fname || !lname || department === "Select Department" || !username || !password || !repeatPassword || !image) {
     setError("Please fill in all fields.");
   } else if (password !== repeatPassword) {
     setError("Passwords do not match!");
@@ -36,11 +38,13 @@ function Signup() {
 
     // Collect the form data
     const dataToSend = {
+      
       fname,
       lname,
       department,
       username,
       password,
+      image
     };
 
     // Send the data to the PHP script
@@ -129,6 +133,8 @@ function Signup() {
               onChange={handleChange}
               className={emptyField("repeatPassword") ? "red-border" : ""}
             />
+              <input className={`${emptyField("image") ? "shadow-red-700 shadow-sm" : "shadow-none"} mt-5  `} type="file" name="image" accept=".png, .jpg, .jpeg" onChange={handleChange} />
+
     
               <button className='p-2 mt-5 bg-[#577F98] text-white' type="submit">Submit</button>
    

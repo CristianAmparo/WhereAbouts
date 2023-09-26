@@ -1,4 +1,7 @@
 const Hero = () => {
+
+
+    
     return (
         <>
             <main className="bg-[#F4F1E8] min-h-screen w-full pt-28 p-10 " >

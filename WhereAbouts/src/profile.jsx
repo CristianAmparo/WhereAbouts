@@ -1,21 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const Profile = () => {
-
     const [selectedStatus, setSelectedStatus] = useState('In');
+    const [availability, setAvailability] = useState('Available');
+    const [location, setLocation] = useState('');
+ 
+
+    
+
+    const handleStatusChange = (event) => {
+        setSelectedStatus(event.target.value);
+    };
+    const handleAvailabilityChange = (event) => {
+        setAvailability(event.target.value);
+    };
+    const handleLocationChange = (event) => {
+        setLocation(event.target.value);
+    };
+
+    const Submit = () => {
+      const data = {
+        selectedStatus,
+        availability,
+        location
+      }
+
+      console.log(data);
+    }
    
-
-
-
-
-    
-    
-
-  const handleStatusChange = (event) => {
-    setSelectedStatus(event.target.value);
-    
-  };
-console.log(selectedStatus)
   return (
     <>
       <section className="fixed right-0 top-0  z-0 h-screen pt-28 w-96 bg-[#F8EFD1] shadow-2xl">
@@ -66,18 +78,45 @@ console.log(selectedStatus)
           <div className="my-5 justify-center bg-black w-3/4 h-0.5 mx-auto"></div>
 
             <div className="flex justify-center gap-3">
-                <h4 className="bg-yellow-500  text-sm font-bold w-max py-1 px-4 rounded-2xl border-2 border-black">Available</h4>
-                <h4 className="bg-gray-200 text-sm font-bold w-max py-1 px-4 rounded-2xl border-2 border-black">Unavailable</h4>
+
+              <label className={`status-label ${selectedStatus === 'In' && 'selected'}`}>
+              <input
+                type="radio"
+                name="availability"
+                value="Available"
+                checked={availability === 'Available'}
+                onChange={handleAvailabilityChange}
+                className="hidden"
+              />
+              <h4 className={`${availability === "Available"? "px-6 outline outline-yellow-400" : "" } bg-yellow-500  text-sm font-bold w-max py-1 px-4 rounded-2xl border-2 border-black`}>Available</h4>
+            </label>
+            <label className={`status-label ${selectedStatus === 'Out' && 'selected'}`}>
+              <input
+                type="radio"
+                name="availability"
+                value="Unavailable"
+                checked={availability === 'Unavailable'}
+                onChange={handleAvailabilityChange}
+                className="hidden"
+              />
+                <h4 className={`${availability === "Unavailable"? "px-6 outline outline-yellow-400" : "" } bg-gray-200 text-sm font-bold w-max py-1 px-4 rounded-2xl border-2 border-black`}>Unavailable</h4>
+            </label>
             </div>
             <h3 className='text-center pt-3'>Choose your availability!</h3>
             <div className="my-5  bg-black w-3/4 h-0.5 mx-auto"></div>
 
             <div className=' text-center mb-16'> 
-              <input className='shadow-md  w-2/3 p-4 ' type="text" placeholder='Type your current location'/>
+              <input 
+                type="text"
+                name="location"
+                value={location}
+                onChange={handleLocationChange}
+                className='shadow-md  w-2/3 p-4 ' 
+                placeholder='Type your current location'/>
               <h3 className='text-center pt-3'>Where are you?</h3>
             </div>
             <div className='text-center'>
-                <button className='mx-auto w-2/3 p-2 rounded-lg shadow-lg bg-slate-500 text-white text-lg self-center '>Update</button>
+                <button className='mx-auto w-2/3 p-2 rounded-lg shadow-lg bg-slate-500 text-white text-lg self-center' onClick={Submit}>Update</button>
             </div>
         </div>
       </section>
