@@ -1,10 +1,6 @@
 <?php
 session_start();
-
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Replace with your React app's origin
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Origin: *");
 
 // Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -21,16 +17,19 @@ if (!$con) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$sql = "SELECT * FROM users WHERE username = '$user'";
+// Handle updates here based on the data sent from your React component
+// Example: Update the location
+$newLocation = $_POST['location'];
+
+$sql = "UPDATE users SET location = '$newLocation' WHERE username = '$user'";
 $result = mysqli_query($con, $sql);
 
 if (!$result) {
-    http_response_code(404); // Not Found
-    echo json_encode(["error" => "User not found"]);
+    http_response_code(500); // Internal Server Error
+    echo json_encode(["error" => "Failed to update user data"]);
     exit();
 }
 
-$user_data = mysqli_fetch_assoc($result);
-echo json_encode($user_data);
+echo json_encode(["message" => "User data updated successfully"]);
 
 $con->close();

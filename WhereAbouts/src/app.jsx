@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route} from 'react-router-dom'
 import Signup from './Signup'
 import Login from './Login'
 import Content from './content'
+import Sample2 from './sample2'
 
  const App = () => {
     return (
@@ -10,7 +11,7 @@ import Content from './content'
                 <Route path="/" element={<Login/>} />
                 <Route path='/Login'  element={<Login />}/>
                 <Route path='/Signup' element={<Signup />}/>
-                <Route path='/Content' element={<Content />} />
+                <Route path='/Content' element={<Content/>} />
             </Routes>
         </BrowserRouter>
     )
